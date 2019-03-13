@@ -127,27 +127,37 @@ class PokerHand
         return array_map(function($card) { return $card->getFace(); }, $this->_cards);
     }
 
-    protected function checkOnePair()
+    protected function checkPairs($num_pairs)
     {
-        foreach ($this->_cards as $card)
-        {
 
+        $faces = $this->getFaces();
+        $face_counts = array_count_values($faces);  // this gives us a dictionary of how many times each value appears in the array
+
+        $pair_count = 0;
+        foreach ($face_counts as $face => $count)
+        {
+            if ($count == 2)
+            {
+                $pair_count++;
+            }
         }
+
+        return $pair_count == $num_pairs;
     }
 
-    protected function checkTwoPair()
-    {
-        foreach ($this->_cards as $card)
-        {
-            
-        }
-    }
     protected function checkThreeOfAKind()
     {
-        foreach ($this->_cards as $card)
-        {
-            
-        }
+
+        $faces = $this->getFaces();
+        $face_counts = array_count_values($faces);  // this gives us a dictionary of how many times each value appears in the array
+        
+        return in_array(3, $face_counts);
+
+    }
+
+    protected function checkStraight()
+    {
+        
     }
 
 }
