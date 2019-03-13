@@ -27,13 +27,12 @@ class Card
     public function __construct($card_str)
     {
 
-        $card_str = strtolower($card_str);
         if (strlen($card_str) < 2 || strlen($card_str) > 3)
         {
             throw new \UnexpectedValueException("The length of the card string was unexpected: {$card_str}");
         }
 
-        $suit = $card_str[-1];
+        $suit = strtolower($card_str[-1]);
         switch ($suit)
         {
             case 'c':
@@ -47,7 +46,7 @@ class Card
                 throw new \UnexpectedValueException("Unknown suit: {$suit} <{$card_str}>");
         }
 
-        $face = substr($card_str, 0, -1);
+        $face = strtoupper(substr($card_str, 0, -1));
         switch ($face)
         {
             case '2':
@@ -59,10 +58,10 @@ class Card
             case '8':
             case '9':
             case '10':
-            case 'j':
-            case 'q':
-            case 'k':
-            case 'a':
+            case 'J':
+            case 'Q':
+            case 'K':
+            case 'A':
                 // no reason to be concerned
                 break;
             default:
