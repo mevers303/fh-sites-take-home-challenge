@@ -13,7 +13,7 @@ class WrongNumberOfCardsException extends \Exception {
         $this->_nCards = $nCards;
     }
 
-    public function errorMessage()
+    public function __toString()
     {
         return "Error on line {$this->getLine()} in {$this->getFile()}: Invalid number of cards: <b>{$this->_nCards}</b>";
     }
@@ -195,13 +195,54 @@ class PokerHand
 
     }
 
-    protected function checkStraight()
+    public function checkStraight()
     {
+
+        $numeric_faces = $this->getFacesAsNumeric();
+
+        // we're going to loop through each card we have, then see if we can count upwards 4 more cards to get our straight
+        foreach ($numeric_faces as $card)
+        {
+
+            $good_cards = 1;  // how many cards in the flush so far
+            while (TRUE)
+            {
+
+                // wrap around ace to 2
+                if ($card == 14)
+                {
+                    $next_card = 2;
+                }
+                else
+                {
+                    $next_card = $card + 1;
+                }
+
+                // the next card for the flush isn't here, move on
+                if (! in_array($next_card, $numeric_faces))
+                {
+                    break;
+                }
+
+                // if we've reached this code, it's a good card
+                $good_cards++;
+                
+                // check if we're at the end of the flush
+                if ($good_cards >= 5)
+                {
+                    return TRUE;
+                }
+
+                // we're not, recurse variable for next loop
+                $card = $next_card;
+
+            }
+
+        }
+
+        // we didn't find a flush
+        return FALSE;
 
     }
 
 }
-
-
-
-$hand = new PokerHand\PokerHand('As Ks Qs Js 10s');
