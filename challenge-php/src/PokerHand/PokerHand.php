@@ -117,17 +117,17 @@ class PokerHand
         return 'Royal Flush';
     }
 
-    protected function getSuits()
+    public function getSuits()
     {
         return array_map(function($card) { return $card->getSuit(); }, $this->_cards);
     }
 
-    protected function getFaces()
+    public function getFaces()
     {
         return array_map(function($card) { return $card->getFace(); }, $this->_cards);
     }
 
-    protected function getFacesAsNumeric()
+    public function getFacesAsNumeric()
     {
         $faces = $this->getFaces();
 
@@ -168,7 +168,7 @@ class PokerHand
 
     }
 
-    protected function checkPairs($num_pairs)
+    public function checkPairs($num_pairs)
     {
 
         $faces = $this->getFaces();
@@ -185,7 +185,7 @@ class PokerHand
         return $pair_count == $num_pairs;
     }
 
-    protected function checkThreeOfAKind()
+    public function checkThreeOfAKind()
     {
 
         $faces = $this->getFaces();
@@ -245,4 +245,14 @@ class PokerHand
 
     }
 
+    public function checkFullHouse()
+    {
+        return $this->checkPairs(1) && $this->checkThreeOfAKind();
+    }
+
 }
+
+
+$hand = new PokerHand('Ah Qs 10c 10d 10s');
+if ($hand->checkFullHouse())
+    echo "Fuck yeah!";
