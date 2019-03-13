@@ -24,6 +24,9 @@ class WrongNumberOfCardsException extends \Exception {
 class Card
 {
 
+    protected $_suit;
+    protected $_face;
+
     public function __construct($card_str)
     {
 
@@ -40,6 +43,7 @@ class Card
             case 'h':
             case 'd':
                 // no reason to be concerned
+                $this->suit = $suit;
                 break;
             default:
                 // they gave us something unexpected
@@ -63,6 +67,7 @@ class Card
             case 'K':
             case 'A':
                 // no reason to be concerned
+                $this->_face = $face;
                 break;
             default:
                 // they gave us something unexpected
@@ -70,6 +75,17 @@ class Card
         }
 
     }
+
+    public function getSuit()
+    {
+        return $this->_suit;
+    }
+
+    public function getFace()
+    {
+        return $this->_face;
+    }
+    
 }
 
 
