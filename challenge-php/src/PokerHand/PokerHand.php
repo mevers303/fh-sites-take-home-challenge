@@ -175,7 +175,7 @@ class PokerHand
         $face_counts = array_count_values($faces);  // this gives us a count of how many times each face appears
         $count_counts = array_count_values($face_counts);  // this gives us a count of pairs, triplets, etc
 
-        $pair_count = $count_counts[2];
+        $pair_count = array_key_exists(2, $count_counts) ? $count_counts[2] : 0;
         // just a random sanity check, how could they possible more than 2 pairs??
         if ($pair_count > 2)
         {
@@ -251,8 +251,3 @@ class PokerHand
     }
 
 }
-
-
-$hand = new PokerHand('Ah Qs 10c 10d 10s');
-if ($hand->checkFullHouse())
-    echo "Fuck yeah!";
