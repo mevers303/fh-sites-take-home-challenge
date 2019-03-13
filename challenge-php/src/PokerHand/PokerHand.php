@@ -127,6 +127,47 @@ class PokerHand
         return array_map(function($card) { return $card->getFace(); }, $this->_cards);
     }
 
+    protected function getFacesAsNumeric()
+    {
+        $faces = $this->getFaces();
+
+        // if they have an ace, let's add it as a '1' card before we begin
+        if (in_array('A', $faces))
+        {
+            $faces[] = '1';
+        }
+
+        // let's create a lambda function that will handle both numeric [0-9] and face [JQKA] together
+        $lambda = function($face)
+                  {
+
+                      // first, we can take care of the number cards e-z
+                      if (is_numeric($face))
+                      {
+                          return (int)$face;
+                      }
+                    
+                      // now we turn the face cards into a numeric value so they can be compared later
+                      switch ($face)
+                      {
+                          case 'J':
+                              return 11;
+                          case 'Q':
+                              return 12;
+                          case 'K':
+                              return 13;
+                          case 'A':
+                              return 14;
+                          default:
+                              throw new \UnexpectedValueException("We found an unexpected face card while searching for flushes: {$face}");
+                      }
+                  };
+        
+        // return new array full of numbers
+        return array_map($lambda, $faces);
+
+    }
+
     protected function checkPairs($num_pairs)
     {
 
@@ -141,6 +182,9 @@ class PokerHand
                 $pair_count++;
             }
         }
+
+        // just a random sanity check, how could they possible more than 2 pairs??
+        if ($pair_count > 2)
 
         return $pair_count == $num_pairs;
     }
@@ -157,7 +201,11 @@ class PokerHand
 
     protected function checkStraight()
     {
-        
+
     }
 
 }
+
+
+
+$hand = new PokerHand\PokerHand('As Ks Qs Js 10s');
