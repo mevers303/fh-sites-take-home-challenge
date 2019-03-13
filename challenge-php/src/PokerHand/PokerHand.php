@@ -185,13 +185,13 @@ class PokerHand
         return $pair_count == $num_pairs;
     }
 
-    public function checkThreeOfAKind()
+    public function checkXOfAKind($num_common_cards)
     {
 
         $faces = $this->getFaces();
         $face_counts = array_count_values($faces);  // this gives us a dictionary of how many times each value appears in the array
         
-        return in_array(3, $face_counts);
+        return in_array($num_common_cards, $face_counts);
 
     }
 
@@ -251,3 +251,11 @@ class PokerHand
     }
 
 }
+
+
+
+$hand = new PokerHand('Ah 3s 10c 10d 10s');
+if ($hand->checkXOfAKind(4))
+    echo "yeah!";
+else
+    echo "no!";
