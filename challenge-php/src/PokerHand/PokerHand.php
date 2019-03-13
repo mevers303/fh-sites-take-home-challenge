@@ -85,12 +85,15 @@ class Card
     {
         return $this->_face;
     }
-    
+     
 }
 
 
 class PokerHand
 {
+
+    protected $_cards;
+
     public function __construct($hand)
     {
 
@@ -104,6 +107,7 @@ class PokerHand
             throw new WrongNumberOfCardsException(count($cards));
         }
 
+        $this->_cards = array_map(function($x) { return new Card($x); }, $cards);
 
     }
 
@@ -112,4 +116,38 @@ class PokerHand
         // TODO: Implement poker hand ranking
         return 'Royal Flush';
     }
+
+    protected function getSuits()
+    {
+        return array_map(function($card) { return $card->getSuit(); }, $this->_cards);
+    }
+
+    protected function getFaces()
+    {
+        return array_map(function($card) { return $card->getFace(); }, $this->_cards);
+    }
+
+    protected function checkOnePair()
+    {
+        foreach ($this->_cards as $card)
+        {
+
+        }
+    }
+
+    protected function checkTwoPair()
+    {
+        foreach ($this->_cards as $card)
+        {
+            
+        }
+    }
+    protected function checkThreeOfAKind()
+    {
+        foreach ($this->_cards as $card)
+        {
+            
+        }
+    }
+
 }
