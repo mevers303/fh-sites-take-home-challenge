@@ -3,7 +3,8 @@
 namespace PokerHand;
 
 
-class WrongNumberOfCardsException extends \Exception {
+class WrongNumberOfCardsException extends \Exception
+{
 
     protected $_nCards;
 
@@ -43,7 +44,7 @@ class Card
             case 'h':
             case 'd':
                 // no reason to be concerned
-                $this->suit = $suit;
+                $this->_suit = $suit;
                 break;
             default:
                 // they gave us something unexpected
@@ -245,17 +246,29 @@ class PokerHand
 
     }
 
+    public function checkFlush()
+    {
+        // all we have to do is count the number of unique values in the suits to make sure it's 1
+        $suits = $this->getSuits();
+        return count(array_unique($suits)) == 1;
+    }
+
     public function checkFullHouse()
     {
-        return $this->checkPairs(1) && $this->checkThreeOfAKind();
+        return $this->checkPairs(1) && $this->checkXOfAKind(3);
+    }
+
+    public function checkStraightFlush()
+    {
+        return $this->checkStraight() && $this->checkFlush();
     }
 
 }
 
 
 
-$hand = new PokerHand('Ah 3s 10c 10d 10s');
-if ($hand->checkXOfAKind(4))
+$hand = new PokerHand('As 3s 10s 10s 10s');
+if ($hand->checkFlush())
     echo "yeah!";
 else
     echo "no!";
