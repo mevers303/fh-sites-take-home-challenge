@@ -1,12 +1,17 @@
 <?php
 
+// Mark Evers
+// 3/13/2019
+// FareHarbor PHP Take Home Challenge
+
 namespace PokerHand;
 
 
+// An exception class when they provide the wrong number of cards
 class WrongNumberOfCardsException extends \Exception
 {
 
-    protected $_nCards;
+    protected $_nCards;  // how many cards they supplied
 
     public function __construct($nCards)
     {
@@ -22,6 +27,7 @@ class WrongNumberOfCardsException extends \Exception
 }
 
 
+// class for parsing a card string into a suit and face
 class Card
 {
 
@@ -31,12 +37,15 @@ class Card
     public function __construct($card_str)
     {
 
+        // are they giving us invalid data?
         if (strlen($card_str) < 2 || strlen($card_str) > 3)
         {
             throw new \UnexpectedValueException("The length of the card string was unexpected: {$card_str}");
         }
 
+        // extract the suit from the very last character of the string
         $suit = strtolower($card_str[-1]);
+        // now let's sanity check
         switch ($suit)
         {
             case 'c':
@@ -51,7 +60,9 @@ class Card
                 throw new \UnexpectedValueException("Unknown suit: {$suit} <{$card_str}>");
         }
 
+        // extract the face by removing the last character (the suit) from the stringt
         $face = strtoupper(substr($card_str, 0, -1));
+        // now let's sanity check
         switch ($face)
         {
             case '2':
@@ -93,14 +104,12 @@ class Card
 class PokerHand
 {
 
-    protected $_cards;
+    protected $_cards;  // an array of Card() objects
 
     public function __construct($hand)
     {
 
         $cards = explode(" ", $hand);
-
-        // let's make sure we're playing real poker here, do some sanity checks...
 
         // check if we have the right number of cards
         if (count($cards) != 5)
@@ -108,6 +117,7 @@ class PokerHand
             throw new WrongNumberOfCardsException(count($cards));
         }
 
+        // convert the strings into objects and save them
         $this->_cards = array_map(function($x) { return new Card($x); }, $cards);
 
     }
@@ -136,16 +146,20 @@ class PokerHand
         return 'High Card';
     }
 
+    // returns an array of just the suits of our cards
     public function getSuits()
     {
         return array_map(function($card) { return $card->getSuit(); }, $this->_cards);
     }
 
+    // returns an array of just the faces of our cards
     public function getFaces()
     {
         return array_map(function($card) { return $card->getFace(); }, $this->_cards);
     }
 
+    // returns an array of just the faces of our cards as a numeric value.
+    // jack is 11, queen is 12, etc. Ace is 14 and also 1
     public function getFacesAsNumeric()
     {
         $faces = $this->getFaces();
@@ -187,6 +201,7 @@ class PokerHand
 
     }
 
+    // looks for $num_pairs number of pairs.  so 1 is a single pair, 2 is a two-pair
     public function checkPairs($num_pairs)
     {
 
@@ -204,6 +219,8 @@ class PokerHand
         return $pair_count == $num_pairs;
     }
 
+    // looks for $num_common_cards card matches.
+    // 3 is three of a kind, 4 is four of a kind
     public function checkXOfAKind($num_common_cards)
     {
 
@@ -214,6 +231,7 @@ class PokerHand
 
     }
 
+    // returns true for a straight
     public function checkStraight()
     {
 
@@ -264,6 +282,7 @@ class PokerHand
 
     }
 
+    // returns true for a flush
     public function checkFlush()
     {
         // all we have to do is count the number of unique values in the suits to make sure it's 1
@@ -271,16 +290,19 @@ class PokerHand
         return count(array_unique($suits)) == 1;
     }
 
+    // returns true for a full house
     public function checkFullHouse()
     {
         return $this->checkPairs(1) && $this->checkXOfAKind(3);
     }
 
+    // returns true for a stright flush
     public function checkStraightFlush()
     {
         return $this->checkStraight() && $this->checkFlush();
     }
 
+    // returns true for a royal flush
     public function checkRoyalFlush()
     {
 
