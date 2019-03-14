@@ -25,44 +25,27 @@ class Card
         // extract the suit from the very last character of the string
         $suit = strtolower($card_str[-1]);
         // now let's sanity check
-        switch ($suit)
+        if (preg_match("/[cshd]/", $suit))
         {
-            case 'c':
-            case 's':
-            case 'h':
-            case 'd':
-                // no reason to be concerned
-                $this->_suit = $suit;
-                break;
-            default:
-                // they gave us something unexpected
-                throw new \UnexpectedValueException("Unknown suit: {$suit} <{$card_str}>");
+            // no reason to be concerned
+            $this->_suit = $suit;
+        }
+        else
+        {
+            throw new \UnexpectedValueException("Unknown suit: {$suit} <{$card_str}>");
         }
 
         // extract the face by removing the last character (the suit) from the stringt
         $face = strtoupper(substr($card_str, 0, -1));
         // now let's sanity check
-        switch ($face)
+        if (preg_match("/[2-9]|10|[JQKA]/", $face))
         {
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case '10':
-            case 'J':
-            case 'Q':
-            case 'K':
-            case 'A':
-                // no reason to be concerned
-                $this->_face = $face;
-                break;
-            default:
-                // they gave us something unexpected
-                throw new \UnexpectedValueException("Unknown face: {$face} <{$card_str}>");
+            // no reason to be concerned
+            $this->_face = $face;
+        }
+        else
+        {
+            throw new \UnexpectedValueException("Unknown face: {$face} <{$card_str}>");
         }
 
     }
