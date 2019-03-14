@@ -263,12 +263,27 @@ class PokerHand
         return $this->checkStraight() && $this->checkFlush();
     }
 
+    public function checkRoyalFlush()
+    {
+
+        // check for the straight flush first
+        if (! $this->checkStraightFlush())
+        {
+            return FALSE;
+        }
+
+        // check if it has a 10 and an Ace. if it does, we're good
+        $faces = $this->getFaces();
+        return in_array('10', $faces) && in_array('A', $faces);
+
+    }
+
 }
 
 
 
-$hand = new PokerHand('As 3s 10s 10s 10s');
-if ($hand->checkFlush())
+$hand = new PokerHand('As 10s Js Ks Qs');
+if ($hand->checkRoyalFlush())
     echo "yeah!";
 else
     echo "no!";
