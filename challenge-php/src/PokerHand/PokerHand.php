@@ -114,8 +114,26 @@ class PokerHand
 
     public function getRank()
     {
-        // TODO: Implement poker hand ranking
-        return 'Royal Flush';
+        if ($this->checkRoyalFlush())
+            return 'Royal Flush';
+        if ($this->checkStraightFlush())
+            return 'Straight Flush';
+        if ($this->checkXOfAKind(4))
+            return 'Four of a Kind';
+        if ($this->checkFullHouse())
+            return 'Full House';
+        if ($this->checkFlush())
+            return 'Flush';
+        if ($this->checkStraight())
+            return 'Straight';
+        if ($this->checkXOfAKind(3))
+            return 'Three of a Kind';
+        if ($this->checkPairs(2))
+            return 'Two Pair';
+        if ($this->checkPairs(1))
+            return 'One Pair';
+        // they didn't get any hand at all :(
+        return 'High Card';
     }
 
     public function getSuits()
@@ -280,10 +298,3 @@ class PokerHand
 
 }
 
-
-
-$hand = new PokerHand('As 10s Js Ks Qs');
-if ($hand->checkRoyalFlush())
-    echo "yeah!";
-else
-    echo "no!";
